@@ -5,7 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
@@ -23,13 +22,13 @@ public class HelloApplication extends Application {
         MenuBar menuBar = new MenuBar();
 
         // Создание пунктов меню
-        Menu about = new Menu("О программе");
-        Menu exit = new Menu("Выход");
+        Menu about = new Menu("Справка");
+        Menu exit = new Menu("Вихід");
         Menu theme = new Menu("Тема");
 
         // Создание подпунктов меню
-        RadioMenuItem darkTheme = new RadioMenuItem  ("Светлая");
-        RadioMenuItem   lightTheme = new RadioMenuItem  ("Темная");
+        RadioMenuItem darkTheme = new RadioMenuItem  ("Світла");
+        RadioMenuItem   lightTheme = new RadioMenuItem  ("Темна");
         ToggleGroup group = new ToggleGroup(); // Свяжем подпункты в radiomenu
         lightTheme.setToggleGroup(group);
         darkTheme.setToggleGroup(group);
@@ -48,8 +47,7 @@ public class HelloApplication extends Application {
         textArea.setPrefRowCount(25);
 
         String textFromFile = "";
-        for(City c : City.readFromFile())
-        {
+        for(City c : City.readFromFile()) {
             textFromFile += c.toString() + '\n' + '\n';
         }
         textArea.setText(textFromFile);
@@ -58,11 +56,11 @@ public class HelloApplication extends Application {
         //
         //
 
-        Label name = new Label(" Название: ");
-        Label population = new Label(" Популяция: ");
-        Label area = new Label(" Площадь: ");
-        Label yearOfFoundation = new Label(" Год основаня: ");
-        Label countOfSchool = new Label(" Кол-во школ: ");
+        Label name = new Label(" Назва: ");
+        Label population = new Label(" Популяція: ");
+        Label area = new Label(" Площина: ");
+        Label yearOfFoundation = new Label(" Рік засновнення: ");
+        Label countOfSchool = new Label(" Кількість шкіл: ");
 
         TextField nameText = new TextField();
         TextField populationText = new TextField();
@@ -70,18 +68,16 @@ public class HelloApplication extends Application {
         TextField yearOfFoundationText = new TextField();
         TextField countOfSchoolText = new TextField();
 
-        Button add = new Button("Добавить");
+        Button add = new Button("Додати");
         add.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                if(nameText.getText() == "")
-                {
-                    showAlert("Поле Название обязательно для ввода!");
+                if(nameText.getText() == "") {
+                    showAlert("Поле Назва обов'язкове для вводу!");
                     return;
                 }
 
-                try
-                {
+                try {
                     int population = Integer.parseInt(populationText.getText());
                     double area = Double.parseDouble(areaText.getText());
                     int yearOfFoundation = Integer.parseInt(yearOfFoundationText.getText());
@@ -89,17 +85,14 @@ public class HelloApplication extends Application {
 
                     City city = new City(nameText.getText(), population, area, yearOfFoundation, countOfSchool);
                     city.writeToFile(true);
-                }
-                catch (Exception ex)
-                {
-                    showAlert("Ошибка ввода не числового значения. Все поля обязательны для ввода!");
+                } catch (Exception ex) {
+                    showAlert("Помилка! Введено не число. Усі поля обов'язкові для вводу");
                     ex.printStackTrace();
                     return;
                 }
 
                 String textFromFile = "";
-                for(City c : City.readFromFile())
-                {
+                for(City c : City.readFromFile()) {
                     textFromFile += c.toString() + '\n' + '\n';
                 }
                 textArea.setText(textFromFile);
@@ -112,41 +105,39 @@ public class HelloApplication extends Application {
             }
         });
 
-        FlowPane formInner = new FlowPane(10, 10, name, nameText, population, populationText, area, areaText);
-        FlowPane formInner2 = new FlowPane(10, 10, yearOfFoundation, yearOfFoundationText, countOfSchool, countOfSchoolText);
-        FlowPane formInner3 = new FlowPane(10, 10, add);
-        VBox form = new VBox(10, formInner, formInner2, formInner3);
+        VBox form = new VBox(10,
+                new FlowPane(10, 10, name, nameText, population, populationText, area, areaText),
+                new FlowPane(10, 10, yearOfFoundation, yearOfFoundationText, countOfSchool, countOfSchoolText),
+                new FlowPane(10, 10, add));
 
         // search, update, delete here ...
-        Label idCountry = new Label("Название города: ");
+        Label idCountry = new Label("Назва міста: ");
         TextField idCountryText = new TextField();
-        Button delete = new Button("Удалить");
+
+        Button delete = new Button("Видалити");
         delete.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 String text = idCountryText.getText();
                 if(text == "") {
-                    showAlert("Введите пожалуйста название");
+                    showAlert("Введіть будь-ласка назву");
                     return;
                 }
 
                 ArrayList<City> cities = City.readFromFile();
                 String test = "";
-                for(City c : cities)
-                {
+                for(City c : cities) {
                     test += c.getName() + " " + text + "\n";
-                    if(c.getName().equals(text))
-                    {
+                    if(c.getName().equals(text)) {
                         City.deleteFromFile(c);
-                        showAlert("Удаление города " + text + " прошло успешно");
+                        showAlert("Видалення міста " + text + " пройшло успішно");
                         break;
                     }
                 }
                 showAlert(test);
 
                 String textFromFile = "";
-                for(City c : City.readFromFile())
-                {
+                for(City c : City.readFromFile()) {
                     textFromFile += c.toString() + '\n' + '\n';
                 }
                 textArea.setText(textFromFile);
@@ -157,18 +148,19 @@ public class HelloApplication extends Application {
 
         VBox deleting = new VBox(10, idCountry, idCountryText, delete);
 
-        Label categoryLabel = new Label("Выберите категорию поиска: ");
-        ObservableList<String> langs = FXCollections.observableArrayList("Название", "Популяция", "Площадь", "Год основания", "Кол-во школ");
-        ComboBox<String> langsComboBox = new ComboBox<String>(langs);
-        langsComboBox.setValue("Название"); // устанавливаем выбранный элемент по умолчанию
-        VBox categoryChoise = new VBox(10, categoryLabel, langsComboBox);
+        Label categoryLabel = new Label("Оберіть категорію пошуку: ");
+        ObservableList<String> cityOptions = FXCollections.observableArrayList(
+                "Назва", "Популяція", "Площина", "Рік засновнення", "Кількість шкіл");
+        ComboBox<String> cityOptionsComboBox = new ComboBox<String>(cityOptions);
+        cityOptionsComboBox.setValue("Название"); // устанавливаем выбранный элемент по умолчанию
+        VBox categoryChoice = new VBox(10, categoryLabel, cityOptionsComboBox);
 
-        Label searchLabel = new Label("Введите поисковой запрос: ");
+        Label searchLabel = new Label("Введіть пошуковий запит: ");
         TextField searchText = new TextField();
-        Button search = new Button("Найти");
+        Button search = new Button("Знайти");
         VBox wordSearch = new VBox(10, searchLabel, searchText, search);
 
-        VBox searching = new VBox(10, categoryChoise, wordSearch);
+        VBox searching = new VBox(10, categoryChoice, wordSearch);
         VBox controls = new VBox(100, deleting, searching);
         FlowPane content = new FlowPane(10, 10, textArea, controls);
 
@@ -176,7 +168,7 @@ public class HelloApplication extends Application {
         Scene scene = new Scene(root);
         stage.setScene(scene);
 
-        stage.setTitle("Редактор городов");
+        stage.setTitle("Редактор міст");
         stage.setWidth(1000);
         stage.setHeight(650);
 
@@ -185,7 +177,7 @@ public class HelloApplication extends Application {
 
     private void showAlert(String text) {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Ошибка");
+        alert.setTitle("Помилка");
 
         // Header Text: null
         alert.setHeaderText(null);

@@ -1,5 +1,6 @@
 package com.crossplatform.filemanager;
 
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.StringTokenizer;
@@ -11,8 +12,7 @@ public class City {
     private int yearOfFoundation;
     private int countOfSchool;
 
-    public void copy(City city)
-    {
+    public void copyFrom(City city) {
         this.name = city.getName();
         this.population = city.getPopulation();
         this.area = city.getArea();
@@ -20,8 +20,8 @@ public class City {
         this.countOfSchool = city.getCountOfSchool();
     }
 
-    public City(String name, long population, double area, int yearOfFoundation, int countOfSchool) throws Exception
-    {
+    public City(String name, long population, double area,
+                int yearOfFoundation, int countOfSchool) throws Exception {
         setName(name);
         setPopulation(population);
         setArea(area);
@@ -52,20 +52,26 @@ public class City {
 
     //Setters
     public void setName(String name) throws Exception{
-        if(name.trim().equals(""))
+        if(name.trim().equals("")) {
             throw new Exception("Error! Name is empty String");
+        }
+
         this.name = name.trim();
     }
 
     public void setPopulation(long population) throws Exception{
-        if(population <= 0)
+        if(population <= 0) {
             throw new Exception("Error! Population less or equal zero");
+        }
+
         this.population = population;
     }
 
     public void setArea(double area) throws Exception{
-        if(area <= 0)
+        if(area <= 0) {
             throw new Exception("Error! Area less or equal zero");
+        }
+
         this.area = area;
     }
 
@@ -74,8 +80,10 @@ public class City {
     }
 
     public void setCountOfSchool(int countOfSchool) throws Exception{
-        if(countOfSchool <= 0)
+        if(countOfSchool <= 0) {
             throw new Exception("Error! Count of school less or equal zero");
+        }
+
         this.countOfSchool = countOfSchool;
     }
 
@@ -117,8 +125,7 @@ public class City {
         return cities;
     }
 
-    static public void deleteFromFile(City city)
-    {
+    static public void deleteFromFile(City city) {
         ArrayList<City> cities = readFromFile();
         cities.remove(city);
 
@@ -126,8 +133,7 @@ public class City {
 
         deleteAllFromFile();
 
-        for(City c : cities)
-        {
+        for(City c : cities) {
             c.writeToFile(true);
         }
     }
@@ -144,19 +150,19 @@ public class City {
     }
 
     public boolean equals(City city) {
-        if(this.getName() == city.getName())
-        {
+        if(this.getName() == city.getName()) {
             return true;
         }
         return false;
     }
 
+    @Override
     public String toString() {
         return
-                "Имя: " + name + "\n" +
-                "Население: " + population + "\n" +
-                "Площадь: " + area + "\n" +
-                "Год основания: " + yearOfFoundation + "\n" +
-                "Кол-во школ: " + countOfSchool;
+                "Назва: " + name + "\n" +
+                "Популяція: " + population + "\n" +
+                "Площина: " + area + "\n" +
+                "Рік засновнення: " + yearOfFoundation + "\n" +
+                "Кількість шкіл: " + countOfSchool;
     }
 }
